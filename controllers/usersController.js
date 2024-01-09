@@ -123,7 +123,7 @@ const usersControllers = {
   //To delete a user by Id
 
   async deleteUser({ params }, res) {
-    try { 
+    try {
       const dbUserData = await User.findOneAndDelete({ _id: params.id });
 
       if (!dbUserData) {

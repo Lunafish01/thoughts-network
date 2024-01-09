@@ -46,7 +46,7 @@ const thoughtsController = {
     }
   },
 
-  //To update a thoughts
+  //To update a thought
   async updateThought({ params, body }, res) {
     try {
       const updatedThought = await Thoughts.findByIdAndUpdate(params.id, body, {
