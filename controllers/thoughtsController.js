@@ -29,7 +29,7 @@ const thoughtsController = {
     }
   },
 
-  //To get thought by Id
+  //To get thoughts by Id
   async getThoughtsById({ params }, res) {
     try {
       console.log("Thoughts Id from Params:", params.id);
@@ -46,7 +46,7 @@ const thoughtsController = {
     }
   },
 
-  //To update a thought
+  //To update a thoughts
   async updateThought({ params, body }, res) {
     try {
       const updatedThought = await Thoughts.findByIdAndUpdate(params.id, body, {
@@ -77,6 +77,47 @@ const thoughtsController = {
         $pull: { thoughts: thought._id },
       });
       res.json({ message: "Thought deleted" });
+    } catch (err) {
+      console.error(err);
+      res.status(400).json(err);
+    }
+  },
+
+  //To add a reaction to thoughts
+  async addReaction({ params, body }, res) {
+    try {
+      console.log("reaction:", params.thoughtId);
+      const updatedThought = await Thought.findByIdAndUpdate(
+        params.thoughtId,
+        { $push: { reaction: body } },
+        { new: true }
+      );
+      if (!updatedThought) {
+        return res
+          .status(404)
+          .json({ message: "No thought found with this Id" });
+      }
+      res.json(updatedThought);
+    } catch (err) {
+      console.error(err);
+      res.status(400).json(err);
+    }
+  },
+
+  //To remove reaction from thoughts
+  async removeReaction({ params }, res) {
+    try {
+      const updatedThought = await Thought.findByIdAndUpdate(
+        params.thoughtId,
+        { $pull: { reactions: { reactionId } } },
+        { new: true }
+      );
+      if (!updatedThought) {
+        return res
+          .status(404)
+          .json({ message: "No thought found with this Id" });
+      }
+      res.json(updatedThought);
     } catch (err) {
       console.error(err);
       res.status(400).json(err);

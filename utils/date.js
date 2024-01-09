@@ -1,4 +1,4 @@
-const dateFormat = (date) => {
+const date = (date) => {
   const options = {
     year: "numeric",
     month: "long",
@@ -10,4 +10,4 @@ const dateFormat = (date) => {
   return new Date(date).toLocaleDateString(undefined, options);
 };
 
-module.exports = dateFormat;
+module.exports = date;
