@@ -119,4 +119,6 @@ const usersControllers = {
       res.status(400).json(err);
     }
   },
+
+  //Need to finish Delete route
 };
