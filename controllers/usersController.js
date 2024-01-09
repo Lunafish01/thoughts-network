@@ -7,9 +7,9 @@ const usersControllers = {
       const dbUserData = await Users.find()
         .populate({
           path: "thoughts",
-          select: "-_v",
+          select: "-__v",
         })
-        .select("-_v");
+        .select("-__v");
       res.json(dbUserData);
     } catch (err) {
       console.error(err);
@@ -23,13 +23,13 @@ const usersControllers = {
       const dbUserData = await Users.findOne({ _id: params.id })
         .populate({
           path: "thoughts",
-          select: "-_v",
+          select: "-__v",
         })
         .populate({
           path: "friends",
-          select: "-_v",
+          select: "-__v",
         })
-        .select("-_v");
+        .select("-__v");
 
       if (!dbUserData) {
         res.status(404).json({ message: "No user found" });
@@ -120,5 +120,25 @@ const usersControllers = {
     }
   },
 
-  //Need to finish Delete route
+  //To delete a user by Id
+
+  async deleteUser({ params }, res) {
+    try { 
+      const dbUserData = await User.findOneAndDelete({ _id: params.id });
+
+      if (!dbUserData) {
+        res.status(404).json({ message: "No user found" });
+        return;
+      }
+
+      await Thought.deleteMany({ _id: { $in: dbUserData.thoughts } });
+
+      res.json({ message: "User and thoughts deleted" });
+    } catch (err) {
+      console.error(err);
+      res.status(400).json(err);
+    }
+  },
 };
+
+module.exports = usersControllers;
